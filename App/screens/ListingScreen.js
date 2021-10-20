@@ -1,8 +1,10 @@
 import React from 'react'
-import { View, StyleSheet, Text } from 'react-native'
+import { View, StyleSheet, Text, FlatList } from 'react-native'
 import AppText from '../components/AppText'
 import CreateButton from '../components/CreateButton'
+import ListItem from '../components/ListItem'
 import Screen from '../components/Screen'
+import Seperator from '../components/Seperator'
 import colors from '../config/colors'
 
 const todos = [
@@ -15,9 +17,14 @@ function ListingScreen() {
    return (
        <Screen style={{padding: 10}}>
           <AppText style={{fontSize: 35, color: colors.primary}}>ToDo</AppText>
-          <View style={styles.list}>
-
-          </View>
+          <FlatList
+             style={styles.list}
+              data={todos}
+              renderItem={({item}) => (
+                  <ListItem title={item.title}/>
+              )}
+              ItemSeparatorComponent={() => <Seperator/>}
+          />
           <View style={styles.buttonContainer}>
             <CreateButton/>
           </View>
@@ -34,7 +41,10 @@ const styles = StyleSheet.create({
         left:0,
         right:0
     },
-    
+    list:{
+        paddingHorizontal: 20,
+        marginTop: 30,
+    }
 })
 
 export default ListingScreen
