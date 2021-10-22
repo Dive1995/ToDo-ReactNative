@@ -13,7 +13,7 @@ function AppText({children, style,  ...otherProps}) {
 
 const styles = StyleSheet.create({
     text:{
-        fontFamily: Constants.platform === "android" ? "Roboto" : "Courier",
+        // fontFamily: Constants.platform === "android" ? "Roboto" : "Courier",
         fontSize: 18,
     }
 })
