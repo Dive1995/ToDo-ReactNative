@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { View, StyleSheet, Text, FlatList, Modal, Button } from 'react-native'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
-import Swipeable from 'react-native-gesture-handler/Swipeable';
+import {MaterialCommunityIcons} from '@expo/vector-icons'
 
 import AppButton from '../components/AppButton'
 import AppFormInput from '../components/AppFormInput'
@@ -56,7 +56,7 @@ function ListingScreen() {
               data={todo}
               keyExtractor={(item) => item.id.toString()}
               renderItem={({item}) => (
-                  <ListItem title={item.title}/>
+                  <ListItem title={item.title} renderRightActions={() => (<View style={styles.rightAction}><MaterialCommunityIcons name="trash-can" size={25} color="#fff"/></View>)}/>
               )}
               ItemSeparatorComponent={() => <Seperator/>}
           />
@@ -141,6 +141,12 @@ const styles = StyleSheet.create({
     modalButtonContainer:{
         flexDirection:"row",
         justifyContent:'space-around'
+    },
+    rightAction:{
+        backgroundColor:"red",
+        width: 70,
+        alignItems:"center",
+        justifyContent:"center"
     }
 })
 

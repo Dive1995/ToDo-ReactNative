@@ -1,16 +1,21 @@
 import React from 'react'
+import { TouchableOpacity } from 'react-native';
 import { View, StyleSheet } from 'react-native'
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+
 import colors from '../config/colors'
 import AppText from './AppText'
 
-function ListItem({title}) {
-   return (
-       <View style={styles.container}>
-          <View style={styles.circle}></View>
-          <View>
-              <AppText>{title}</AppText>
-          </View>
-       </View>
+function ListItem({title, renderRightActions}) {
+   return ( 
+       <Swipeable renderRightActions={renderRightActions}>
+        <TouchableOpacity style={styles.container}>
+            <View style={styles.circle}></View>
+            <View>
+                <AppText>{title}</AppText>
+            </View>
+        </TouchableOpacity>
+       </Swipeable>
    )
 }
 
