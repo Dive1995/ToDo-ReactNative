@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, StyleSheet, Text, FlatList, Modal, Button } from 'react-native'
+import AppButton from '../components/AppButton'
 import AppText from '../components/AppText'
 import AppTextInput from '../components/AppTextInput'
 import CreateButton from '../components/CreateButton'
@@ -7,6 +8,10 @@ import ListItem from '../components/ListItem'
 import Screen from '../components/Screen'
 import Seperator from '../components/Seperator'
 import colors from '../config/colors'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
+import AppFormInput from '../components/AppFormInput'
+import {getTodos} from '../api'
 
 const todos = [
     {id:1, title: "Create TODO app 📱"},
@@ -14,17 +19,26 @@ const todos = [
     {id:3, title: "Eat Apple 🍎"},
 ]
 
+
+
+const validationSchema = Yup.object().shape({
+    title: Yup.string().min(1).label("Title").required("Add some todo.")
+})
+
 function ListingScreen() {
     const [modalVisible, setModalVisible] = useState(false)
-    const [text, setText] = useState()
-    console.log(text)
+    // const [title, setTitle] = useState()
+    const [todo, setTodo] = useState(todos)
+
+    
 
    return (
        <Screen style={{padding: 10}}>
           <AppText style={{fontSize: 35, color: colors.primary}}>ToDo</AppText>
           <FlatList
              style={styles.list}
-              data={todos}
+              data={todo}
+              keyExtractor={(item) => item.id.toString()}
               renderItem={({item}) => (
                   <ListItem title={item.title}/>
               )}
@@ -34,15 +48,52 @@ function ListingScreen() {
             visible={modalVisible}
             animationType="slide"
             transparent={true}
+            onRequestClose={() => setModalVisible(false)}
           >
               <View style={styles.modal}>
                   <AppText>New TODO</AppText>
-                  <AppTextInput style={{backgroundColor:"#fff", marginVertical:15}} placeholder="Whats on your mind!!" onChangeText={(text) => setText(text)} value={text}/>
-                  <Button title="Close" onPress={() => setModalVisible(false)}/>
+                  <Formik
+                    initialValues={{title:''}}
+                    onSubmit={({title}) => {
+                                    const newTodo = {id: Date.now(), title}
+                                    setTodo([newTodo, ...todo])
+                                    // setTitle('')
+                                    setModalVisible(false)
+                                }}
+                    validationSchema={validationSchema}
+                  >
+                      {({handleSubmit}) => (
+                        <>
+                        {/* <AppTextInput autoFocus={true} style={{backgroundColor:"#fff", marginVertical:15}} placeholder="Whats on your mind!!" onChangeText={(text) => setTitle(text)} value={title}/> */}
+                        <AppFormInput 
+                            name="title"
+                            placeholder="Whats on your mind !!"
+                            autoFocus
+                            />
+                        <View>
+                            
+                        </View>
+                        <View style={styles.modalButtonContainer}>
+                            <AppButton 
+                                style={{backgroundColor:"grey"}}
+                                title="Cancel" 
+                                onPress={() => {
+                                    setModalVisible(false)
+                                    // setTitle('')
+                                }}
+                            />
+                            <AppButton 
+                                title="Add"
+                                onPress={handleSubmit}
+                            />
+                        </View>
+                        </>
+                      )}
+                  </Formik>
               </View>
           </Modal>
           <View style={styles.buttonContainer}>
-            <CreateButton onPress={() => setModalVisible(true)}/>
+            {!modalVisible && <CreateButton onPress={() => setModalVisible(true)}/>}
           </View>
        </Screen>
    )
@@ -66,11 +117,15 @@ const styles = StyleSheet.create({
         // width:100,
         padding: 20,
         position: 'absolute',
-        top:300,
+        top:280,
         left:50,
         right:50,
         backgroundColor:"#f1f1f1",
         borderRadius:20,
+    },
+    modalButtonContainer:{
+        flexDirection:"row",
+        justifyContent:'space-around'
     }
 })
 

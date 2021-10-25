@@ -12,11 +12,12 @@ function AppTextInput({style,...otherProps}) {
 
 const styles = StyleSheet.create({
     textInput:{
-        backgroundColor: "#f1f1f1",
-        borderRadius:25,
+        backgroundColor: "#fff",
+        borderRadius:5,
         fontSize:18,
         padding:10,
-        paddingHorizontal:20,
+        paddingHorizontal:15,
+        marginTop:10
     }
 })
 
