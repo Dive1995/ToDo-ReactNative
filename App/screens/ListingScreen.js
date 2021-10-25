@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { View, StyleSheet, Text, FlatList, Modal, Button } from 'react-native'
+import { Formik } from 'formik'
+import * as Yup from 'yup'
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+
 import AppButton from '../components/AppButton'
+import AppFormInput from '../components/AppFormInput'
 import AppText from '../components/AppText'
-import AppTextInput from '../components/AppTextInput'
+import colors from '../config/colors'
 import CreateButton from '../components/CreateButton'
 import ListItem from '../components/ListItem'
 import Screen from '../components/Screen'
 import Seperator from '../components/Seperator'
-import colors from '../config/colors'
-import { Formik } from 'formik'
-import * as Yup from 'yup'
-import AppFormInput from '../components/AppFormInput'
-import {getTodos} from '../api'
+import { getData, storeData } from '../storage/cache'
+
 
 const todos = [
     {id:1, title: "Create TODO app 📱"},
@@ -19,18 +21,32 @@ const todos = [
     {id:3, title: "Eat Apple 🍎"},
 ]
 
-
-
 const validationSchema = Yup.object().shape({
     title: Yup.string().min(1).label("Title").required("Add some todo.")
 })
 
 function ListingScreen() {
     const [modalVisible, setModalVisible] = useState(false)
-    // const [title, setTitle] = useState()
-    const [todo, setTodo] = useState(todos)
+    const [todo, setTodo] = useState([])
 
+    // getting todos
+    useEffect(() => {
+        getTodos()
+    },[])
+
+    async function getTodos(){
+        const result = await getData("todo")
+        if(result){
+            setTodo(result)
+            return 
+        }
+        setTodo([])
+    }
     
+    async function addTodo(value){
+        await storeData("todo", value)
+        getTodos()
+    }
 
    return (
        <Screen style={{padding: 10}}>
@@ -56,8 +72,7 @@ function ListingScreen() {
                     initialValues={{title:''}}
                     onSubmit={({title}) => {
                                     const newTodo = {id: Date.now(), title}
-                                    setTodo([newTodo, ...todo])
-                                    // setTitle('')
+                                    addTodo([newTodo, ...todo])
                                     setModalVisible(false)
                                 }}
                     validationSchema={validationSchema}
