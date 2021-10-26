@@ -23,7 +23,9 @@ const styles = StyleSheet.create({
     container:{
         alignItems:"center",
         flexDirection:"row",
-        marginVertical:15,
+        paddingVertical:15,
+        paddingHorizontal: 20,
+        // backgroundColor:"gold"
     },
     circle:{
         borderWidth: 2,

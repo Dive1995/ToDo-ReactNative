@@ -17,3 +17,12 @@ export const getData = async (key) => {
         console.log("Error occured while getting data from local storage : " + error);
     }
 }
+
+export const deleteData = async (key) => {
+    try {
+        await AsyncStorage.removeItem(key)
+        console.log("Deleted item");
+    } catch (error) {
+        console.log("Error while deleting data from local storage : " + error);
+    }
+}

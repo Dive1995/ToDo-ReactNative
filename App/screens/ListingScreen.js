@@ -13,21 +13,15 @@ import ListItem from '../components/ListItem'
 import Screen from '../components/Screen'
 import Seperator from '../components/Seperator'
 import { getData, storeData } from '../storage/cache'
+import { TouchableHighlight } from 'react-native-gesture-handler'
 
-
-const todos = [
-    {id:1, title: "Create TODO app 📱"},
-    {id:2, title: "Walk with Dog 🐶"},
-    {id:3, title: "Eat Apple 🍎"},
-]
 
 const validationSchema = Yup.object().shape({
     title: Yup.string().min(1).label("Title").required("Add some todo.")
 })
 
-function ListingScreen() {
+function ListingScreen({todo, setTodo}) {
     const [modalVisible, setModalVisible] = useState(false)
-    const [todo, setTodo] = useState([])
 
     // getting todos
     useEffect(() => {
@@ -48,15 +42,27 @@ function ListingScreen() {
         getTodos()
     }
 
+    const handleRemove = async (id) => {
+        const newTodos = todo.filter(item => item.id !== id)
+        setTodo(newTodos)
+        await storeData("todo", newTodos)
+        // getTodos()
+    }
+
    return (
-       <Screen style={{padding: 10}}>
-          <AppText style={{fontSize: 35, color: colors.primary}}>ToDo</AppText>
+       <Screen>
+          <AppText style={{fontSize: 35, color: colors.primary, margin: 20}}>ToDo</AppText>
           <FlatList
              style={styles.list}
               data={todo}
               keyExtractor={(item) => item.id.toString()}
               renderItem={({item}) => (
-                  <ListItem title={item.title} renderRightActions={() => (<View style={styles.rightAction}><MaterialCommunityIcons name="trash-can" size={25} color="#fff"/></View>)}/>
+                  <ListItem 
+                    title={item.title} 
+                    renderRightActions={() => (
+                        <TouchableHighlight onPress={() => handleRemove(item.id)} style={styles.rightAction}>
+                            <MaterialCommunityIcons name="trash-can" size={25} color="#fff"/>
+                        </TouchableHighlight>)}/>
               )}
               ItemSeparatorComponent={() => <Seperator/>}
           />
@@ -124,8 +130,7 @@ const styles = StyleSheet.create({
         right:0
     },
     list:{
-        paddingHorizontal: 20,
-        marginTop: 30,
+        // marginTop: 30,
     },
     modal:{
         // height: 80,
@@ -146,7 +151,8 @@ const styles = StyleSheet.create({
         backgroundColor:"red",
         width: 70,
         alignItems:"center",
-        justifyContent:"center"
+        justifyContent:"center",
+        height: "100%",
     }
 })
 
