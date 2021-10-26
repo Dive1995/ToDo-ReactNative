@@ -6,6 +6,7 @@ import * as Yup from 'yup'
 import AppButton from './AppButton'
 import AppFormInput from './AppFormInput'
 import AppText from './AppText'
+import colors from '../config/colors'
 
 const validationSchema = Yup.object().shape({
     title: Yup.string().min(1).label("Title").required("Add some todo.")
@@ -30,7 +31,7 @@ function AppModal({modalVisible ,setModalVisible, addTodo, todo }) {
                                 }}
                     validationSchema={validationSchema}
                   >
-                      {({handleSubmit}) => (
+                      {({handleSubmit, values}) => (
                         <>
                         {/* <AppTextInput autoFocus={true} style={{backgroundColor:"#fff", marginVertical:15}} placeholder="Whats on your mind!!" onChangeText={(text) => setTitle(text)} value={title}/> */}
                         <AppFormInput 
@@ -43,7 +44,7 @@ function AppModal({modalVisible ,setModalVisible, addTodo, todo }) {
                         </View>
                         <View style={styles.modalButtonContainer}>
                             <AppButton 
-                                style={{backgroundColor:"grey"}}
+                                style={{backgroundColor: colors.medium}}
                                 title="Cancel" 
                                 onPress={() => {
                                     setModalVisible(false)
@@ -51,6 +52,7 @@ function AppModal({modalVisible ,setModalVisible, addTodo, todo }) {
                                 }}
                             />
                             <AppButton 
+                                disabled={!values.title}
                                 title="Add"
                                 onPress={handleSubmit}
                             />
@@ -69,11 +71,12 @@ const styles = StyleSheet.create({
         // width:100,
         padding: 20,
         position: 'absolute',
-        top:280,
+        bottom:100,
         left:50,
         right:50,
-        backgroundColor:"#f1f1f1",
+        backgroundColor: colors.white,
         borderRadius:20,
+        elevation:1,
     },
     modalButtonContainer:{
         flexDirection:"row",

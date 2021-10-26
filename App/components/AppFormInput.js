@@ -14,7 +14,7 @@ function AppFormInput({name, ...otherProps}) {
             value={values[name]}
             {...otherProps}
         />
-        <ErrorMessage error={errors[name]}/>
+        {/* <ErrorMessage error={errors[name]}/> */}
        </>
    )
 }

@@ -61,7 +61,7 @@ function ListingScreen({todo, setTodo, completedTodo, setCompletedTodo}) {
    return (
        <Screen>
           <AppText style={{fontSize: 35, color: colors.primary, margin: 20}}>ToDo</AppText>
-          {todo.length > 0 ? <FlatList
+          {todo?.length > 0 ? <FlatList
              style={styles.list}
               data={todo}
               keyExtractor={(item) => item?.id?.toString()}

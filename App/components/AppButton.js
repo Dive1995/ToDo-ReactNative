@@ -3,10 +3,10 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native'
 import colors from '../config/colors'
 import AppText from './AppText'
 
-function AppButton({color=colors.white, onPress, style, title}) {
+function AppButton({color=colors.white, onPress, style, title, disabled}) {
    return (
-       <TouchableOpacity onPress={onPress}>
-        <View style={[styles.button, style]}>
+       <TouchableOpacity onPress={onPress} disabled={disabled}>
+        <View style={[styles.button, style, disabled && {backgroundColor: colors.inactive, color:colors.medium}]}>
           <AppText style={{textAlign:'center', color}}>{title}</AppText>
         </View>
        </TouchableOpacity>

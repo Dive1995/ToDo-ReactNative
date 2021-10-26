@@ -31,12 +31,15 @@ function CompletedScreen({completedTodo ,setCompletedTodo}) {
    return (
     <Screen>
     <AppText style={{fontSize: 35, color: colors.primary, margin: 20}}>Completed ToDo</AppText>
-    {completedTodo.length > 0 ? <FlatList
+    {completedTodo?.length > 0 ? <FlatList
        style={styles.list}
         data={completedTodo}
         keyExtractor={(item) => item?.id?.toString()}
         renderItem={({item}) => (
             <ListItem 
+              icon="done"
+              circleStyle={{backgroundColor: colors.success, borderColor: colors.success}}
+              textStyle={{color: colors.medium, textDecorationLine:"line-through"}}
               onPress={() => handleComplete(item.id)}
               title={item.title} 
               renderRightActions={() => (
