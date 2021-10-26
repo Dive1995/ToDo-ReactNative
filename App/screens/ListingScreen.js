@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { View, StyleSheet, Text, FlatList, Modal, Button } from 'react-native'
-import { Formik } from 'formik'
-import * as Yup from 'yup'
+
+
 import {MaterialCommunityIcons} from '@expo/vector-icons'
 
-import AppButton from '../components/AppButton'
-import AppFormInput from '../components/AppFormInput'
+
 import AppText from '../components/AppText'
 import colors from '../config/colors'
 import CreateButton from '../components/CreateButton'
@@ -14,13 +13,12 @@ import Screen from '../components/Screen'
 import Seperator from '../components/Seperator'
 import { getData, storeData } from '../storage/cache'
 import { TouchableHighlight } from 'react-native-gesture-handler'
+import AppModal from '../components/AppModal'
 
 
-const validationSchema = Yup.object().shape({
-    title: Yup.string().min(1).label("Title").required("Add some todo.")
-})
 
-function ListingScreen({todo, setTodo}) {
+
+function ListingScreen({todo, setTodo, completedTodo, setCompletedTodo}) {
     const [modalVisible, setModalVisible] = useState(false)
 
     // getting todos
@@ -49,15 +47,27 @@ function ListingScreen({todo, setTodo}) {
         // getTodos()
     }
 
+    const handleComplete = async (id) => {
+        const newTodos = todo.filter(item => item.id !== id)
+        setTodo(newTodos)
+        await storeData("todo", newTodos)
+
+        const completed = todo.filter(item => item.id == id)
+        setCompletedTodo([...completedTodo, ...completed ])
+        await storeData("completedTodo", [...completedTodo, ...completed ])
+    }
+
+
    return (
        <Screen>
           <AppText style={{fontSize: 35, color: colors.primary, margin: 20}}>ToDo</AppText>
-          <FlatList
+          {todo.length > 0 ? <FlatList
              style={styles.list}
               data={todo}
-              keyExtractor={(item) => item.id.toString()}
+              keyExtractor={(item) => item?.id?.toString()}
               renderItem={({item}) => (
                   <ListItem 
+                    onPress={() => handleComplete(item.id)}
                     title={item.title} 
                     renderRightActions={() => (
                         <TouchableHighlight onPress={() => handleRemove(item.id)} style={styles.rightAction}>
@@ -65,54 +75,10 @@ function ListingScreen({todo, setTodo}) {
                         </TouchableHighlight>)}/>
               )}
               ItemSeparatorComponent={() => <Seperator/>}
-          />
-          <Modal
-            visible={modalVisible}
-            animationType="slide"
-            transparent={true}
-            onRequestClose={() => setModalVisible(false)}
-          >
-              <View style={styles.modal}>
-                  <AppText>New TODO</AppText>
-                  <Formik
-                    initialValues={{title:''}}
-                    onSubmit={({title}) => {
-                                    const newTodo = {id: Date.now(), title}
-                                    addTodo([newTodo, ...todo])
-                                    setModalVisible(false)
-                                }}
-                    validationSchema={validationSchema}
-                  >
-                      {({handleSubmit}) => (
-                        <>
-                        {/* <AppTextInput autoFocus={true} style={{backgroundColor:"#fff", marginVertical:15}} placeholder="Whats on your mind!!" onChangeText={(text) => setTitle(text)} value={title}/> */}
-                        <AppFormInput 
-                            name="title"
-                            placeholder="Whats on your mind !!"
-                            autoFocus
-                            />
-                        <View>
-                            
-                        </View>
-                        <View style={styles.modalButtonContainer}>
-                            <AppButton 
-                                style={{backgroundColor:"grey"}}
-                                title="Cancel" 
-                                onPress={() => {
-                                    setModalVisible(false)
-                                    // setTitle('')
-                                }}
-                            />
-                            <AppButton 
-                                title="Add"
-                                onPress={handleSubmit}
-                            />
-                        </View>
-                        </>
-                      )}
-                  </Formik>
-              </View>
-          </Modal>
+          /> : <AppText style={styles.notice}>You are free for today 🤩</AppText>}
+
+          <AppModal todo={todo} modalVisible={modalVisible} setModalVisible={setModalVisible} addTodo={addTodo}/>
+
           <View style={styles.buttonContainer}>
             {!modalVisible && <CreateButton onPress={() => setModalVisible(true)}/>}
           </View>
@@ -132,27 +98,18 @@ const styles = StyleSheet.create({
     list:{
         // marginTop: 30,
     },
-    modal:{
-        // height: 80,
-        // width:100,
-        padding: 20,
-        position: 'absolute',
-        top:280,
-        left:50,
-        right:50,
-        backgroundColor:"#f1f1f1",
-        borderRadius:20,
-    },
-    modalButtonContainer:{
-        flexDirection:"row",
-        justifyContent:'space-around'
-    },
+    
     rightAction:{
         backgroundColor:"red",
         width: 70,
         alignItems:"center",
         justifyContent:"center",
         height: "100%",
+    },
+    notice:{
+        textAlign:"center",
+        color:colors.medium,
+        marginTop:40
     }
 })
 

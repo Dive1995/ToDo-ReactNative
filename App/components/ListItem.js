@@ -6,15 +6,15 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import colors from '../config/colors'
 import AppText from './AppText'
 
-function ListItem({title, renderRightActions}) {
+function ListItem({title, renderRightActions, onPress}) {
    return ( 
        <Swipeable renderRightActions={renderRightActions}>
-        <TouchableOpacity style={styles.container}>
-            <View style={styles.circle}></View>
+        <View style={styles.container}>
+            <TouchableOpacity onPress={onPress} style={styles.circle}></TouchableOpacity>
             <View>
                 <AppText>{title}</AppText>
             </View>
-        </TouchableOpacity>
+        </View>
        </Swipeable>
    )
 }
