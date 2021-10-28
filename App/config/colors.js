@@ -2,6 +2,7 @@ export default {
     active:"#D3D8E5",
     black:"#000",
     dark:"#ocococ",
+    darkGray:"#ACB0BD",
     danger:"#ff5252",
     gray:"#f1f1f1",
     inactive:"#DEE5E5",

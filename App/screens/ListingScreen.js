@@ -79,6 +79,12 @@ function ListingScreen({todo, setTodo, completedTodo, setCompletedTodo}) {
               ItemSeparatorComponent={() => <Seperator/>}
           /> : <AppText style={styles.notice}>You are free for today 🤩</AppText>}
 
+        
+         
+        
+          <View style={styles.buttonContainer}>
+            {!modalVisible && <CreateButton onPress={() => setModalVisible(true)}/>}
+          </View>
           <AppModal 
             todo={todo} 
             modalVisible={modalVisible} 
@@ -88,10 +94,6 @@ function ListingScreen({todo, setTodo, completedTodo, setCompletedTodo}) {
             priority={priority}
             setPriority={setPriority}
             />
-
-          <View style={styles.buttonContainer}>
-            {!modalVisible && <CreateButton onPress={() => setModalVisible(true)}/>}
-          </View>
        </Screen>
    )
 }

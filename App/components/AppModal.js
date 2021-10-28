@@ -1,7 +1,9 @@
-import React, { useRef } from 'react'
-import { View, StyleSheet, Modal, TouchableOpacity } from 'react-native'
+import React from 'react'
+import { View, StyleSheet, Modal } from 'react-native'
 import { Formik } from 'formik'
 import * as Yup from 'yup'
+
+
 
 import AppButton from './AppButton'
 import AppFormInput from './AppFormInput'
@@ -58,7 +60,7 @@ function AppModal({addTodo, modalVisible, onPressPriority, setModalVisible,  tod
                             keyExtractor={(item) => item.id.toString()}
                             numColumns={3}
                             renderItem={({item}) => (
-                                <Pressable hitSlop={5} onPressIn={() => onPressPriority(item.backgroundColor)} style={[styles.priority, {backgroundColor: item.backgroundColor, borderWidth:2, borderColor: priority === item.backgroundColor ? colors.primary : colors.white, borderStyle:"solid"}]}></Pressable>
+                                <Pressable hitSlop={5} onPressIn={() => onPressPriority(item.backgroundColor)} style={[styles.priority, {backgroundColor: item.backgroundColor, borderWidth:2, borderColor: priority === item.backgroundColor ? colors.darkGray : colors.white, borderStyle:"solid"}]}></Pressable>
                             )}
                         />
                             
@@ -70,7 +72,7 @@ function AppModal({addTodo, modalVisible, onPressPriority, setModalVisible,  tod
                                 title="Cancel" 
                                 onPress={() => {
                                     setModalVisible(false)
-                                    // setTitle('')
+                                    setPriority(colors.medium)
                                 }}
                             />
                             <AppButton 

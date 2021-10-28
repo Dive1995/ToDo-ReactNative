@@ -25,13 +25,14 @@ export default function App() {
       <Tab.Navigator 
         screenOptions={{ 
             headerShown: false,
-            tabBarActiveTintColor:"white", 
+            tabBarInactiveTintColor:colors.darkGray,
+            tabBarActiveTintColor:colors.medium, 
             tabBarActiveBackgroundColor: colors.active, 
             tabBarInactiveBackgroundColor: colors.inactive
         }}>
         <Tab.Screen 
           name="TODO" 
-          options={{tabBarIcon:() => <MaterialIcons name="add-box" size={25}/>}}>
+          options={{tabBarIcon:({color, size}) => <MaterialIcons name="add-box" size={size} color={color}/>}}>
           {() => <ListingScreen 
                     todo={todo} 
                     setTodo={setTodo} 
@@ -40,7 +41,7 @@ export default function App() {
         </Tab.Screen>
         <Tab.Screen 
           name="Completed" 
-          options={{tabBarIcon:() => <MaterialIcons name="done-outline" size={20}/>}}>
+          options={{tabBarIcon:({color, size}) => <MaterialIcons name="done-outline" size={size} color={color}/>}}>
             {() => <CompletedScreen 
                       completedTodo={completedTodo} 
                       setCompletedTodo={setCompletedTodo}/>}
