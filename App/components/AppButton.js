@@ -6,8 +6,8 @@ import AppText from './AppText'
 function AppButton({color=colors.white, onPress, style, title, disabled}) {
    return (
        <TouchableOpacity onPress={onPress} disabled={disabled}>
-        <View style={[styles.button, style, disabled && {backgroundColor: colors.inactive, color:colors.medium}]}>
-          <AppText style={{textAlign:'center', color}}>{title}</AppText>
+        <View style={[styles.button, style, disabled && {backgroundColor: colors.active}]}>
+          <AppText style={[{textAlign:'center', color}, disabled && {color:colors.medium}]}>{title}</AppText>
         </View>
        </TouchableOpacity>
    )

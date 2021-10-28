@@ -41,7 +41,7 @@ function CompletedScreen({completedTodo ,setCompletedTodo}) {
               circleStyle={{backgroundColor: colors.success, borderColor: colors.success}}
               textStyle={{color: colors.medium, textDecorationLine:"line-through"}}
               onPress={() => handleComplete(item.id)}
-              title={item.title} 
+              title={item?.title} 
               renderRightActions={() => (
                   <TouchableHighlight onPress={() => handleRemove(item.id)} style={styles.rightAction}>
                       <MaterialCommunityIcons name="trash-can" size={25} color="#fff"/>

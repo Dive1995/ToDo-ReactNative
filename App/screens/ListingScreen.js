@@ -20,6 +20,7 @@ import AppModal from '../components/AppModal'
 
 function ListingScreen({todo, setTodo, completedTodo, setCompletedTodo}) {
     const [modalVisible, setModalVisible] = useState(false)
+    const [priority, setPriority] = useState(colors.medium)
 
     // getting todos
     useEffect(() => {
@@ -53,8 +54,8 @@ function ListingScreen({todo, setTodo, completedTodo, setCompletedTodo}) {
         await storeData("todo", newTodos)
 
         const completed = todo.filter(item => item.id == id)
-        setCompletedTodo([...completedTodo, ...completed ])
-        await storeData("completedTodo", [...completedTodo, ...completed ])
+        setCompletedTodo([...completed, ...completedTodo ])
+        await storeData("completedTodo", [...completed, ...completedTodo])
     }
 
 
@@ -67,17 +68,26 @@ function ListingScreen({todo, setTodo, completedTodo, setCompletedTodo}) {
               keyExtractor={(item) => item?.id?.toString()}
               renderItem={({item}) => (
                   <ListItem 
-                    onPress={() => handleComplete(item.id)}
-                    title={item.title} 
+                    onPress={() => handleComplete(item?.id)}
+                    title={item?.title} 
+                    circleStyle={{borderColor: item?.priority}}
                     renderRightActions={() => (
-                        <TouchableHighlight onPress={() => handleRemove(item.id)} style={styles.rightAction}>
+                        <TouchableHighlight underlayColor="red" onPress={() => handleRemove(item.id)} style={styles.rightAction}>
                             <MaterialCommunityIcons name="trash-can" size={25} color="#fff"/>
                         </TouchableHighlight>)}/>
               )}
               ItemSeparatorComponent={() => <Seperator/>}
           /> : <AppText style={styles.notice}>You are free for today 🤩</AppText>}
 
-          <AppModal todo={todo} modalVisible={modalVisible} setModalVisible={setModalVisible} addTodo={addTodo}/>
+          <AppModal 
+            todo={todo} 
+            modalVisible={modalVisible} 
+            onPressPriority={(value) => setPriority(value)} 
+            setModalVisible={setModalVisible} 
+            addTodo={addTodo}
+            priority={priority}
+            setPriority={setPriority}
+            />
 
           <View style={styles.buttonContainer}>
             {!modalVisible && <CreateButton onPress={() => setModalVisible(true)}/>}
@@ -100,7 +110,7 @@ const styles = StyleSheet.create({
     },
     
     rightAction:{
-        backgroundColor:"red",
+        backgroundColor: colors.danger,
         width: 70,
         alignItems:"center",
         justifyContent:"center",
